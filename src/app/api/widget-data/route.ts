@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 // This endpoint is unauthenticated and meant to be consumed by Scriptable/KWGT widgets.
 // If you want to secure it, you can add a simple API key check here.
 

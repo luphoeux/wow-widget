@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { getBlizzardAccessToken, getWowTokenPrice } from '@/lib/blizzard';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   // Check for the CRON_SECRET to ensure only authorized callers can trigger this
   const authHeader = request.headers.get('authorization');
