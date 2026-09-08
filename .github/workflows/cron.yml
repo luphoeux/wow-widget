@@ -1,0 +1,16 @@
+name: Cron Update Token Prices
+
+on:
+  schedule:
+    # Runs every 30 minutes
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Vercel Cron Endpoint
+        run: |
+          curl -X GET "https://wow-widget-seven.vercel.app/api/cron/update-token-prices" \
+          -H "Authorization: Bearer wow_widget_cron_secret_1234"
