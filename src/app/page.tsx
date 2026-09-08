@@ -42,21 +42,6 @@ async function getLatestPrices() {
   }
 }
 
-async function getHistory() {
-  try {
-    const { data, error } = await supabase
-      .from('wow_token_prices')
-      .select('price, created_at, region')
-      .order('created_at', { ascending: false })
-      .limit(10); // Show last 10 records
-
-    if (error) return [];
-    return data || [];
-  } catch (error) {
-    return [];
-  }
-}
-
 function formatGold(copper: number | null) {
   if (copper === null) return '---';
   const gold = Math.floor(copper / 10000);
@@ -65,7 +50,6 @@ function formatGold(copper: number | null) {
 
 export default async function Home() {
   const { us, eu, error } = await getLatestPrices();
-  const history = await getHistory();
 
   let realmsUp = false;
   try {
@@ -160,49 +144,6 @@ export default async function Home() {
                   ? "All monitored realms (Illidan, Ragnaros, Drakkari) are operational. Ready for tracking." 
                   : "One or more monitored realms are currently offline or under maintenance."}
              </p>
-          </div>
-        </div>
-
-        {/* History Table */}
-        <div className={styles.card + ' ' + styles.glass + ' animate-fade-in'} style={{ animationDelay: '0.3s', gridColumn: '1 / -1' }}>
-          <div className={styles.cardHeader}>
-            <h2 className={styles.cardTitle}>
-              <Activity size={24} color="var(--accent-gold)" />
-              Recent History
-            </h2>
-          </div>
-          
-          <div style={{ marginTop: '1rem', overflowX: 'auto' }}>
-            <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                  <th style={{ padding: '0.75rem', color: 'var(--text-secondary)' }}>Time</th>
-                  <th style={{ padding: '0.75rem', color: 'var(--text-secondary)' }}>Region</th>
-                  <th style={{ padding: '0.75rem', color: 'var(--text-secondary)' }}>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {history.length === 0 ? (
-                  <tr>
-                    <td colSpan={3} style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                      No history available yet.
-                    </td>
-                  </tr>
-                ) : history.map((record, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <td style={{ padding: '0.75rem' }}>
-                      {new Date(record.created_at).toLocaleString()}
-                    </td>
-                    <td style={{ padding: '0.75rem', textTransform: 'uppercase', color: record.region === 'us' ? 'var(--accent-gold)' : 'var(--accent-silver)' }}>
-                      {record.region}
-                    </td>
-                    <td style={{ padding: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      {formatGold(record.price)} <span className={styles.coinIcon + ' ' + styles.gold}></span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
 
